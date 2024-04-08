@@ -2,3 +2,17 @@ body {
     background-color: aquamarine;
 }
 
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 10rem);
+    grid-template-rows: repeat(3, 10rem);
+    gap: 2px;
+    padding: 10px;
+}
+
+.square {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
