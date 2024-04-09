@@ -1,3 +1,8 @@
+// Ensures that board is displayed on the page initially. 
+document.addEventListener("DOMContentLoaded", () => {
+    gameBoard.renderBoard();
+
+});
 
 // Gameboard module which contains the logic for getting and resetting a gameboard.
 const gameBoard = (function () {
@@ -14,15 +19,38 @@ const gameBoard = (function () {
         document.querySelector('#game-board').innerHTML = boardElement;
 
     }
+    
+    // Checks if cell in board is empty
+    function isCellEmpty(index) {
+        board[index] = "";
 
+    }
+    
+    // Sets the mark on the cell in the board.
+    function setCell(index, mark) {
+        board[index] = mark;
+
+
+    }
+    
+    // Checks if the board is full.
+    function isBoardFull() {
+
+    }
+    
+    // Resets the board after restarting the game.
     function resetBoard() {
         for(let i = 0; i < board.length; i++) {
             board[i] = "";
         }
+        console.log("Restarted the game!");
 
     }
 
     return {
+        isBoardFull,
+        isCellEmpty,
+        setCell,
         renderBoard,
         resetBoard
     };
@@ -52,11 +80,49 @@ const game = (function () {
 
 
     }
+    // Checks all possible combinations to win the game.
+    function checkWin(mark) {
+        const combinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 4, 8], [0, 3, 6], [1, 4, 7],
+            [2, 5, 8], [2, 4, 6]
+        ];
 
-    function checkWin() {
+        for(let combination of combinations) {
+            if(combination.every(index => board[index] === mark)) {
+                return true;
+            }
+        }
+
+        return false;
+
+        
 
     }
+    // Controlls the logic of player making a move.
+    function makeMove(index) {
+        if(gameBoard.isCellEmpty(index)) {
+            gameBoard.isCellEmpty(index, currentPlayer.mark);
 
+            if(checkWin(currentPlayer.mark)) {
+                console.log(`${currentPlayer.name} wins!`);
+                return;
+            }
+            else if(gameBoard.isBoardFull()) {
+                console.log('It is a draw!');
+                return;
+            }
+            else {
+                playerTurn();
+            }
+        }
+
+
+    
+    
+
+    }
+     
     function playerTurn() {
         currentPlayer = currentPlayer === player1 ? player2 : player1; // If current player is player 1, switch current player to player 2, else switch to player 1.
 
@@ -66,12 +132,13 @@ const game = (function () {
 
     return { 
         startGame, 
+        makeMove,
         checkWin, 
         playerTurn };
 
 })();
 
-// Event attached on start button
+// Event attached on start button.
 document.getElementById("start-button").addEventListener("click", () => {
     const player1Name = document.getElementById("player1").value;
     const player2Name = document.getElementById("player2").value;
@@ -82,6 +149,10 @@ document.getElementById("start-button").addEventListener("click", () => {
     console.log(player2Name);
 });
 
+// Event attached on restart button.
+document.getElementById("restart-button").addEventListener("click", () => {
+    gameBoard.resetBoard();
+});
 
 // Factory function for creating a player.
 function createPlayer(name, mark) {
