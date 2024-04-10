@@ -2,6 +2,25 @@ body {
     background-color: aquamarine;
 }
 
+#container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#button-group {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 2rem;
+}
+
+button {
+    padding: 0.5rem;
+    margin: 1rem;
+    border-radius: 0.5rem;
+}
+
 #game-board {
     display: grid;
     grid-template-columns: repeat(3, 10rem);
@@ -15,4 +34,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: white;
+}
+
+h1 {
+    text-align: center;
+}
+
+input {
+    margin: 1rem;
 }

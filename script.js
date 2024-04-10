@@ -4,11 +4,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+// Factory function for creating a player.
+function createPlayer(name, mark) {
+    return { name, mark };
+    
+}
+
 // Gameboard module which contains the logic for getting and resetting a gameboard.
 const gameBoard = (function () {
     const board = ["", "", "",
                    "", "", "",
                    "", "", ""];
+
+    function getBoard() {
+        return board;
+    }
 
     function renderBoard() {
         let boardElement = ""; // Initiate empty HTML string
@@ -22,19 +32,25 @@ const gameBoard = (function () {
     
     // Checks if cell in board is empty
     function isCellEmpty(index) {
-        board[index] = "";
+        return board[index] === "";
 
     }
     
     // Sets the mark on the cell in the board.
     function setCell(index, mark) {
-        board[index] = mark;
+        return board[index] = mark;
 
 
     }
     
     // Checks if the board is full.
     function isBoardFull() {
+        for(let i = 0; i < board.length; i++) {
+            if(board[i] === "") {
+                return false;
+                }
+        }
+        return true;
 
     }
     
@@ -44,6 +60,7 @@ const gameBoard = (function () {
             board[i] = "";
         }
         console.log("Restarted the game!");
+        renderBoard();
 
     }
 
@@ -52,6 +69,7 @@ const gameBoard = (function () {
         isCellEmpty,
         setCell,
         renderBoard,
+        getBoard,
         resetBoard
     };
 
@@ -82,6 +100,7 @@ const game = (function () {
     }
     // Checks all possible combinations to win the game.
     function checkWin(mark) {
+        const board = gameBoard.getBoard();
         const combinations = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],
             [0, 4, 8], [0, 3, 6], [1, 4, 7],
@@ -102,14 +121,16 @@ const game = (function () {
     // Controlls the logic of player making a move.
     function makeMove(index) {
         if(gameBoard.isCellEmpty(index)) {
-            gameBoard.isCellEmpty(index, currentPlayer.mark);
+            gameBoard.setCell(index, currentPlayer.mark);
+
+            renderBoard();
 
             if(checkWin(currentPlayer.mark)) {
-                console.log(`${currentPlayer.name} wins!`);
+                document.getElementById('display-results').innerHTML = `${currentPlayer.name} wins!`;
                 return;
             }
             else if(gameBoard.isBoardFull()) {
-                console.log('It is a draw!');
+                document.getElementById('display-results').innerHTML = 'It is a draw!';
                 return;
             }
             else {
@@ -149,13 +170,20 @@ document.getElementById("start-button").addEventListener("click", () => {
     console.log(player2Name);
 });
 
-// Event attached on restart button.
+// Event attached on restart button. Resets board and clears the input fields for player name.
 document.getElementById("restart-button").addEventListener("click", () => {
     gameBoard.resetBoard();
+    document.getElementById("player1").value = "";
+    document.getElementById("player2").value = "";
+    document.getElementById('display-results').innerHTML = "";
 });
 
-// Factory function for creating a player.
-function createPlayer(name, mark) {
-    return { name, mark };
-    
-}
+// Event listener on each element with the class square.
+document.getElementById('game-board').addEventListener("click", (event) => {
+    if(event.target.classList.contains('square')) {
+        const index = Array.from(event.target.parentNode.children).indexOf(event.target);
+        game.makeMove(index);
+        console.log("Marked");
+    }
+});
+
