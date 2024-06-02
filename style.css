@@ -1,5 +1,5 @@
 body {
-    background-color: aquamarine;
+    background-image: url('https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 }
 
 #container {
@@ -19,7 +19,11 @@ button {
     padding: 0.5rem;
     margin: 1rem;
     border-radius: 0.5rem;
+    border-color:#29a2ff;
+    font-family: 'Courier New', Courier, monospace;
+    background-image: linear-gradient(to right bottom, #29a2ff, #66baff, #96d1fe, #c5e7fe, #f4fbff);
 }
+
 
 #game-board {
     display: grid;
@@ -37,8 +41,21 @@ button {
     background-color: white;
 }
 
+#display-results {
+    font-size: larger;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+}
+
 h1 {
     text-align: center;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+label {
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
 }
 
 input {

@@ -1,8 +1,4 @@
-// Ensures that board is displayed on the page initially. 
-document.addEventListener("DOMContentLoaded", () => {
-    gameBoard.renderBoard();
 
-});
 
 // Factory function for creating a player.
 function createPlayer(name, mark) {
@@ -60,6 +56,7 @@ const gameBoard = (function () {
             board[i] = "";
         }
         console.log("Restarted the game!");
+        document.querySelector('#game-board').style.display = 'none';
         renderBoard();
 
     }
@@ -85,11 +82,20 @@ const game = (function () {
     let player2;
 
     function startGame(player1Name, player2Name) {
+        if(!player1Name || !player2Name) {
+            alert("Please enter both names!");
+            return;
+        }
+
         player1 = createPlayer(player1Name, "X"); // Create player 1
         player2 = createPlayer(player2Name, "O"); // Create player 2 
         currentPlayer = player1; // Set player 1 as the current player
+        gameStartedStatus = true;
 
+        
         renderBoard();
+
+        document.querySelector('#game-board').style.display = 'none';
 
 
 
@@ -120,6 +126,11 @@ const game = (function () {
     }
     // Controlls the logic of player making a move.
     function makeMove(index) {
+        if(!gameStartedStatus) {
+            alert("Please enter names to start the game!");
+            return;
+        }
+
         if(gameBoard.isCellEmpty(index)) {
             gameBoard.setCell(index, currentPlayer.mark);
 
@@ -164,10 +175,12 @@ document.getElementById("start-button").addEventListener("click", () => {
     const player1Name = document.getElementById("player1").value;
     const player2Name = document.getElementById("player2").value;
 
+
     game.startGame(player1Name, player2Name);
     console.log("Game started!");
     console.log(player1Name);
     console.log(player2Name);
+    document.querySelector('#game-board').style.display = 'grid';
 });
 
 // Event attached on restart button. Resets board and clears the input fields for player name.
@@ -176,6 +189,8 @@ document.getElementById("restart-button").addEventListener("click", () => {
     document.getElementById("player1").value = "";
     document.getElementById("player2").value = "";
     document.getElementById('display-results').innerHTML = "";
+    document.querySelector('#game-board').style.display = 'none';
+    gameStartedStatus = false;
 });
 
 // Event listener on each element with the class square.
@@ -187,3 +202,6 @@ document.getElementById('game-board').addEventListener("click", (event) => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector('#game-board').style.display = 'none';
+});
